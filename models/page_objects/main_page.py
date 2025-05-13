@@ -31,5 +31,6 @@ class MainPage(BasePage):
         """
         self.search_bar.input_destination(destination)
         self.search_bar.choose_dates(start_date, end_date)
+        self.search_bar.guests_num_entry_button.click()
         self.search_bar.choose_guests_num(num_of_adults, num_of_children, num_of_infants, num_of_pets)
         self.search_bar.search()

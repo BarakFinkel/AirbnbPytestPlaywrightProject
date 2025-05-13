@@ -1,6 +1,7 @@
 from playwright.sync_api import Page
 from models.page_objects.base_page import BasePage
-from models.utilities.helper_methods import handle_popup
+from models.utilities.helper_methods import remove_non_alphanumeric
+
 
 class OverviewPage(BasePage):
 
@@ -8,7 +9,8 @@ class OverviewPage(BasePage):
         super().__init__(page, url)
 
         # Handles popup in case it happens.
-        handle_popup(page)
+        self.page.add_locator_handler(self.page.locator('[aria-label="Translation on"]'),
+                                     lambda  : self.page.keyboard.press("Escape", delay=500))
 
         self.check_in_locator = self.page.get_by_test_id("change-dates-checkIn")
         self.check_out_locator = self.page.get_by_test_id("change-dates-checkOut")
@@ -42,6 +44,7 @@ class OverviewPage(BasePage):
         Extracts the offer's check-in date.
         :return: The check-in date
         """
+        self.check_in_locator.wait_for(state="visible", timeout=3000)
         return self.check_in_locator.inner_text()
 
     def get_check_out_date(self) -> str:
@@ -49,6 +52,7 @@ class OverviewPage(BasePage):
         Extracts the offer's check-out date.
         :return: The check-out date
         """
+        self.check_in_locator.wait_for(state="visible", timeout=3000)
         return self.check_out_locator.inner_text()
 
     def get_guests_info(self) -> dict[str, int]:
@@ -66,7 +70,7 @@ class OverviewPage(BasePage):
         Extracts the price of the offer from the page.
         :return: The price, rounded.
         """
-        return int(self.price_locator.inner_text()[1:])
+        return int(remove_non_alphanumeric(self.price_locator.inner_text()))
 
     def print_details(self):
         """

@@ -1,5 +1,4 @@
 import re
-
 from playwright.sync_api import Locator, Page
 from datetime import date, datetime
 
@@ -7,10 +6,6 @@ from datetime import date, datetime
 
 def get_locator_containing(page: Page, attribute : str, text : str) -> Locator:
     return page.locator(f'[{attribute}*="{text}"]')
-
-def handle_popup(page: Page) -> None:
-    close_button = page.locator('[aria-label="Close"]').last
-    if close_button.is_visible(): close_button.click()
 
 # __________________ Card Container Helper Methods __________________ #
 
@@ -41,9 +36,7 @@ def extract_price_info(locator : Locator) -> int:
         price_locator = locator.get_by_test_id("price-availability-row").get_by_text(PRICE_CONTAINED_TEXT, exact=False)
         price_locator.wait_for(state="visible", timeout=2000)
         price_texts = price_locator.text_content().split(" ")  # Get matching text and parse by " "
-        price_text = price_texts[0][1:]                        # Get first queried text and remove its payment symbol char.
-        cleaned = price_text.replace(",", "")      # Remove , separator
-        return int(cleaned)
+        return int(remove_non_alphanumeric_and_dot(price_texts[0]))
     except Exception:
         return 10**18 # Returning big value in case of an exception being thrown.
 
@@ -71,9 +64,9 @@ def convert_date_string_format(date_str: str) -> str:
     """
     # Split by commas and
     parts = date_str.split(" ")
-    day   = re.sub(r'[^a-zA-Z0-9]', '', parts[0])
-    month = re.sub(r'[^a-zA-Z0-9]', '', parts[2])
-    year  = re.sub(r'[^a-zA-Z0-9]', '', parts[3])
+    day   = remove_non_alphanumeric(parts[0])
+    month = remove_non_alphanumeric(parts[2])
+    year  = remove_non_alphanumeric(parts[3])
 
     # Construct the full date string
     cleaned_str = f"{day} {month} {year}"
@@ -86,3 +79,9 @@ def convert_date_string_format(date_str: str) -> str:
         formatted_date_obj = formatted_date_obj[1:]
 
     return formatted_date_obj
+
+def remove_non_alphanumeric(text: str) -> str:
+    return re.sub(r'[^a-zA-Z0-9]', '', text)
+
+def remove_non_alphanumeric_and_dot(text: str) -> str:
+    return re.sub(r'[^a-zA-Z0-9.]', '', text)

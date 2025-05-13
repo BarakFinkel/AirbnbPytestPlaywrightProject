@@ -1,5 +1,5 @@
 from typing import List, Callable
-from playwright.sync_api import Locator, Page
+from playwright.sync_api import Locator
 from models.utilities.helper_methods import extract_price_info, extract_rating_info
 
 class CardContainer:

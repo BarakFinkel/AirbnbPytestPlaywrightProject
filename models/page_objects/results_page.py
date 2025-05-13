@@ -37,10 +37,13 @@ class ResultsPage(BasePage):
         :param num_of_pets: The expected number of pets.
         :return: None
         """
-        self.search_bar.little_search_bar_open_button.click()
+        self.search_bar.little_search_bar_open_button.first.click()
         self.search_bar.assert_destination(destination)
+        self.search_bar.check_in_button.first.click()
         self.search_bar.assert_dates(start_date, end_date)
+        self.search_bar.guests_num_assert_button.first.click()
         self.search_bar.assert_guests_num(num_of_adults, num_of_children, num_of_infants, num_of_pets)
+        self.page.keyboard.press("Escape", delay=500)
 
     def goto_first_page(self):
         self.page.goto(self.first_url)
