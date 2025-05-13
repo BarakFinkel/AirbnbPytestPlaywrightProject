@@ -8,12 +8,17 @@ This project is an automated UI testing framework for Airbnb, built using **Play
 
 ```
 .
-├── models
-│   ├── base_page.py
-│   ├── main_page.py
-│   ├── results_page.py
-│   ├── overview_page.py
-│   ├── reservation_page.py
+├── models  
+│   ├── page_objects
+    │   ├── base_page.py
+│   │   ├── main_page.py
+│   │   ├── results_page.py
+│   │   ├── overview_page.py
+│   │   └── reservation_page
+│   │       ├── reservation_page.py
+│   │       ├── reservation_page_a.py
+│   │       ├── reservation_page_b.py
+│   │       └── reservation_page_factory.py
 │   ├── page_components
 │   │   ├── search_bar.py
 │   │   └── card_container.py
@@ -56,7 +61,7 @@ This project is an automated UI testing framework for Airbnb, built using **Play
 * **MainPage**: Entry to and execution of the search feature.
 * **ResultsPage**: Assertions of main page search details & extraction of 'best' result available.
 * **OverviewPage**: Displays details of a selected listing.
-* **ReservationPage**: Booking and checkout UI elements.
+* **ReservationPage**: Booking and checkout UI elements. Has a base class, 2 sub-classes, and a factory that constructs one of the sub-classes according to the page's properties.
 
 ### Components:
 
@@ -69,7 +74,7 @@ This project is an automated UI testing framework for Airbnb, built using **Play
 
 Custom utility methods for:
 
-* Converting and formatting dates
+* Converting and formatting strings and dates
 * Extracting attributes
 * Locating elements based on partial attribute matches
 
