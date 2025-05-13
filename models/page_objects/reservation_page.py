@@ -117,6 +117,7 @@ class ReservationPage(BasePage):
         formatted_prefix = "(+" + str(prefix) + ")"
 
         # Gets all options available from the selector
+        self.number_prefix_selector.click()
         options = self.number_prefix_selector.locator("option")
         count = options.count()
 

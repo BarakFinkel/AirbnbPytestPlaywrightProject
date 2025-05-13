@@ -11,8 +11,9 @@ WEBSITE_PREFIX = "https://airbnb.com"
 class ResultsPage(BasePage):
     def __init__(self, page: Page, url: str):
         super().__init__(page, url)
+        self.locator    = page.get_by_test_id("card-container")
         self.search_bar = SearchBar(page)
-        self.first_url = page.url
+        self.first_url  = page.url
         self.next_page_button = page.get_by_role("link", name="Next")
 
     def assert_preferences(
@@ -36,6 +37,7 @@ class ResultsPage(BasePage):
         :param num_of_pets: The expected number of pets.
         :return: None
         """
+        self.search_bar.little_search_bar_open_button.click()
         self.search_bar.assert_destination(destination)
         self.search_bar.assert_dates(start_date, end_date)
         self.search_bar.assert_guests_num(num_of_adults, num_of_children, num_of_infants, num_of_pets)
@@ -64,18 +66,12 @@ class ResultsPage(BasePage):
         page_count = 0
 
         while True:
-            # Tries to find any card container in the page, will break the loop if fails.
-            try:
-                self.page.get_by_test_id("card-container").first.wait_for(state="visible", timeout=5000)
-            except TimeoutError:
-                print("No cards loaded on this page.")
-                break
-
-            # 1 sec wait for the rest of the card containers to potentially load.
-            self.page.wait_for_timeout(1000)
+            # Wait for the first and list card container locators.
+            self.locator.first.wait_for(state="visible", timeout=10000)
+            self.locator.last.wait_for(state="visible", timeout=10000)
 
             # Get all visible card locators
-            card_locators = self.page.get_by_test_id("card-container").all()
+            card_locators = self.locator.all()
             card_containers = [CardContainer(locator) for locator in card_locators]
 
             # Get the best card in the current page's list.
@@ -91,7 +87,8 @@ class ResultsPage(BasePage):
 
             # If we can move to the next page, we do so.
             # Otherwise, we break the loop.
-            if not self.next_page_button.is_visible() or self.next_page_button.is_disabled(): break
+            if not self.next_page_button.is_visible() or self.next_page_button.is_disabled():
+                break
             self.next_page_button.click()
             page_count += 1
 

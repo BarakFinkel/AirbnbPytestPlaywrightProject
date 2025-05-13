@@ -1,17 +1,9 @@
 import re
-import random
 
 from playwright.sync_api import Locator, Page
 from datetime import date, datetime
 
 # _________________ General Locator Helper Methods _________________ #
-
-def click_if_visible(locator: Locator) -> None:
-    """
-    Clicks the locator if its visible.
-    """
-    if locator.is_visible():
-        locator.click()
 
 def get_locator_containing(page: Page, attribute : str, text : str) -> Locator:
     return page.locator(f'[{attribute}*="{text}"]')
@@ -33,7 +25,7 @@ def extract_rating_info(locator : Locator) -> tuple[float, int]:
     """
     try:
         rating_locator = locator.get_by_text(RATING_CONTAINED_TEXT, exact=False)
-        rating_locator.wait_for(state="visible", timeout=200)    # Small wait window for getting the element
+        rating_locator.wait_for(state="visible", timeout=2000)    # Small wait window for getting the element
         text_content = rating_locator.text_content().split(" ")  # Parse the text in the element by " "
         return float(text_content[0]), int(text_content[-2])     # Return the rating and amount of reviewers
     except Exception:
@@ -47,7 +39,7 @@ def extract_price_info(locator : Locator) -> int:
     """
     try:
         price_locator = locator.get_by_test_id("price-availability-row").get_by_text(PRICE_CONTAINED_TEXT, exact=False)
-        price_locator.wait_for(state="visible", timeout=200)
+        price_locator.wait_for(state="visible", timeout=2000)
         price_texts = price_locator.text_content().split(" ")  # Get matching text and parse by " "
         price_text = price_texts[0][1:]                        # Get first queried text and remove its payment symbol char.
         cleaned = price_text.replace(",", "")      # Remove , separator

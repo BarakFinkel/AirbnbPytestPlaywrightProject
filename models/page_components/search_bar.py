@@ -1,5 +1,5 @@
 from playwright.sync_api import Page, Locator
-from models.utilities.helper_methods import increment_n_times, click_if_visible
+from models.utilities.helper_methods import increment_n_times
 from datetime import date
 
 class SearchBar:
@@ -7,7 +7,6 @@ class SearchBar:
     def __init__(self, page: Page):
         self.page = page
         self.little_search_bar_open_button = page.get_by_test_id("little-search-location")
-        click_if_visible(self.little_search_bar_open_button)
         self.search_input = page.get_by_test_id("structured-search-input-field-query")
         self.check_in_button = page.get_by_test_id("structured-search-input-field-split-dates-0")
         self.check_out_button = page.get_by_test_id("structured-search-input-field-split-dates-1")
