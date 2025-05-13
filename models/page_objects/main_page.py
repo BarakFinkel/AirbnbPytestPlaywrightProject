@@ -1,6 +1,6 @@
 from datetime import date
 from playwright.sync_api import Page
-from models.base_page import BasePage
+from models.page_objects.base_page import BasePage
 from models.page_components.search_bar import SearchBar
 
 class MainPage(BasePage):
@@ -18,6 +18,17 @@ class MainPage(BasePage):
             num_of_infants : int = 0,
             num_of_pets : int = 0
     ):
+        """
+        A method that takes in expected data and inputs it within the search bar.
+        :param destination: The expected destination.
+        :param start_date: The expected check-in date.
+        :param end_date: The expected check-out date.
+        :param num_of_adults: The expected number of adults.
+        :param num_of_children: The expected number of children.
+        :param num_of_infants: The expected number of infants.
+        :param num_of_pets: The expected number of pets.
+        :return: None
+        """
         self.search_bar.input_destination(destination)
         self.search_bar.choose_dates(start_date, end_date)
         self.search_bar.choose_guests_num(num_of_adults, num_of_children, num_of_infants, num_of_pets)
