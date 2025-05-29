@@ -10,7 +10,7 @@ This project is an automated UI testing framework for Airbnb, built using **Play
 .
 ├── models  
 │   ├── page_objects
-    │   ├── base_page.py
+│   │   ├── base_page.py
 │   │   ├── main_page.py
 │   │   ├── results_page.py
 │   │   ├── overview_page.py
